@@ -42,16 +42,41 @@ for(d in 1:length(drawn)){
 
 winner * drawn[d]
 
+#---------------------------------
+# Part 2
+#---------------------------------
 
+for(b in 1:num.boars){
+  for(l in 1:5){
+    new <- stringr::str_split(boards[(b-1)*5 + (l)], " ")[[1]]
+    new <- new[new != ""]
+    boards.data[l,,b] <- new
+  }
+}
+
+winner <- NA
 b.w <- array(NA, num.boars)
+for(d in 1:length(drawn)){
+  for(b in 1:num.boars){
+    position <- match(as.character(drawn[d]), boards.data[,,b])
+    boards.data[,,b][position] <- NA
+  }
+  
+  for(b in 1:num.boars){
+    if(any(rowSums(is.na(boards.data[,,b])) == ncol(boards.data[,,b])) | 
+       any(colSums(is.na(boards.data[,,b])) == ncol(boards.data[,,b]))){
+      
+      b.w[b] <- b
+      if(isFALSE(any(is.na(b.w)))){
+        looser <- sum(as.numeric(boards.data[,,b]), na.rm = T)
+        break()  
+      }
+    }
+  }
+  if(isFALSE(any(is.na(b.w)))) break()
+}
 
-
-
-b.w[20] <- 20
-
-isFALSE(any(is.na(b.w)))
-
-looser <- b
+looser * drawn[d]
 
 
 
